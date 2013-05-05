@@ -7,7 +7,12 @@
 <div>
   Enables this
   <pre>
-  public String handleSomethingUsingSessionAttribute(@RequestParam String param1, @SessionAttribue AuthenticationToken token);
+  public String handleSomethingUsingSessionAttribute(
+    @RequestParam String param1, 
+    @SessionAttribue AuthenticationToken token) {
+    
+    // controller logic
+  }
   </pre>
 </div>
 
