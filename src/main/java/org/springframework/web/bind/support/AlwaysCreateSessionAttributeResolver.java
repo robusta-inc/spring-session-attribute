@@ -33,9 +33,12 @@ class AlwaysCreateSessionAttributeResolver extends AbstractChainingSessionAttrib
 
     @Override
     protected Object resolveSessionAttributeInternal(SessionHandler handler, SessionAttributeParameter parameter) throws MissingServletRequestSessionAttributeException {
+        LOGGER.trace("Checking if SessionAttribute specified with createNew = true");
         if(parameter.isAlwaysCreate()) {
+            LOGGER.trace("createNew is = true, creating a new instance with the SessionAttributeParameter and using the SessionHandler to add new instance to session");
             return handler.addToSession(parameter.resolvedAttributeName(), parameter.createNewInstance());
         }
+        LOGGER.trace("createNew is not = true, so this implementation cannot resolve SessionAttribute, passing the buck");
         return passTheBuck();
     }
 }

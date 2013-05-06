@@ -31,6 +31,7 @@ class MissingMandatorySessionAttributeResolver extends AbstractChainingSessionAt
 
     @Override
     protected Object resolveSessionAttributeInternal(SessionHandler handler, SessionAttributeParameter parameter) throws MissingServletRequestSessionAttributeException {
+        LOGGER.error("All resolution strategies have failed, finally throwing exception against the container.");
         throw new MissingServletRequestSessionAttributeException(parameter.resolvedAttributeName());
     }
 }

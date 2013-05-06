@@ -15,6 +15,8 @@
  */
 package org.springframework.web.bind.support;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.MissingServletRequestSessionAttributeException;
 
@@ -23,8 +25,14 @@ import org.springframework.web.bind.MissingServletRequestSessionAttributeExcepti
  * @since 1.0
  */
 abstract class AbstractChainingSessionAttributeResolver implements SessionAttributeResolver {
+    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final SessionAttributeResolver nextInChain;
-    protected static final Object PASSING_THE_BUCK_AROUND = new Object();
+    protected static final Object PASSING_THE_BUCK_AROUND = new Object() {
+        @Override
+        public String toString() {
+            return "PASSING_THE_BUCK_AROUND";
+        }
+    };
 
     protected AbstractChainingSessionAttributeResolver(SessionAttributeResolver nextInChain) {
         this.nextInChain = nextInChain;
@@ -33,13 +41,17 @@ abstract class AbstractChainingSessionAttributeResolver implements SessionAttrib
 
     @Override
     public Object resolveSessionAttribute(SessionHandler handler, SessionAttributeParameter parameter) throws MissingServletRequestSessionAttributeException {
+        LOGGER.trace("Passing on SessionHandler and SessionAttributeParameter to resolveSessionAttributeInternal");
         Object resolution = resolveSessionAttributeInternal(handler, parameter);
-        Assert.notNull(resolution, "Not expecting a null resolution, if unable to resolve implementations should return - PASSING_THE_BUCK_AROUND");
+        LOGGER.trace("resolveSessionAttributeInternal returned: '{}'", resolution);
+        Assert.notNull(resolution, String.format("Not expecting a null resolution, if unable to resolve, implementations should return: '%s'", PASSING_THE_BUCK_AROUND));
         if(resolution == PASSING_THE_BUCK_AROUND) {
+            LOGGER.trace("The buck has been passed, calling next resolver in the chain: '{}'", nextInChain);
             Assert.notNull(nextInChain, "Session Attribute is unresolved and next in chain is null, verify composition of the session attribute resolved chain.");
             //noinspection ConstantConditions
             return nextInChain.resolveSessionAttribute(handler, parameter);
         } else {
+            LOGGER.trace("Session Attribute has been resolved, returning resolution: '{}'", resolution);
             return resolution;
         }
     }

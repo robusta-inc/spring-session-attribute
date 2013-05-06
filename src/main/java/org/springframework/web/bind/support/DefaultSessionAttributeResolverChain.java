@@ -15,6 +15,8 @@
  */
 package org.springframework.web.bind.support;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.MissingServletRequestSessionAttributeException;
 
@@ -46,13 +48,15 @@ import org.springframework.web.bind.MissingServletRequestSessionAttributeExcepti
  * @see MissingMandatorySessionAttributeResolver
  */
 public class DefaultSessionAttributeResolverChain implements SessionAttributeResolver {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSessionAttributeResolverChain.class);
+
     protected DefaultSessionAttributeResolverChain() {
         this(new AlwaysCreateSessionAttributeResolver(
                 new SessionLookupSessionAttributeResolver(
                         new CreatableParameterSessionAttributeResolver(
                                 new OptionalParameterSessionAttributeResolver(
                                         new MissingMandatorySessionAttributeResolver())))));
-
+        LOGGER.trace("DefaultSessionAttributeResolverChain initialized with the default resolver chain");
     }
 
     protected final SessionAttributeResolver resolverChain;

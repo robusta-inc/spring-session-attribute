@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.MethodParameter;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import static org.hamcrest.Matchers.*;
@@ -31,6 +32,7 @@ public class SessionAttributeParameterTest {
     private SessionAttributeParameter parameter;
     @Mock private MethodParameter methodParameter;
     @Mock private SessionAttribute sessionAttribute;
+
     private static final String PARAMETER_NAME = "testParameterObject";
     private static final Class PARAMETER_TYPE = TestParameterObject.class;
 
@@ -46,9 +48,14 @@ public class SessionAttributeParameterTest {
     }
 
     private void setExpectationsOnMethodParameterToReturn(SessionAttribute sessionAttribute, String parameterName, Class parameterType) {
+        when(methodParameter.getMethod()).thenReturn(ReflectionUtils.findMethod(AClass.class, "aMethod"));
         when(methodParameter.getParameterAnnotation(SessionAttribute.class)).thenReturn(sessionAttribute);
         when(methodParameter.getParameterName()).thenReturn(parameterName);
         when(methodParameter.getParameterType()).thenReturn(parameterType);
+    }
+
+    public static class AClass {
+        public void aMethod() {}
     }
 
     @Test

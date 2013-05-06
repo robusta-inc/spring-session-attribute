@@ -15,6 +15,8 @@
  */
 package org.springframework.web.bind.annotation;
 
+import java.lang.annotation.*;
+
 /**
  * Annotation which indicates that a method parameter should be bound to a web
  * request session attribute. Supported for annotated handler methods in
@@ -30,6 +32,9 @@ package org.springframework.web.bind.annotation;
  * @see RequestParam
  * @see org.springframework.web.bind.support.SessionAttributeWebArgumentResolver
  */
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
 public @interface SessionAttribute {
     /**
      * The name of the session attribute to bind to.

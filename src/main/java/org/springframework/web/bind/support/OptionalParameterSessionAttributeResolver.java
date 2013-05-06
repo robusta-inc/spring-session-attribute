@@ -29,9 +29,12 @@ class OptionalParameterSessionAttributeResolver extends AbstractChainingSessionA
 
     @Override
     protected Object resolveSessionAttributeInternal(SessionHandler handler, SessionAttributeParameter parameter) {
+        LOGGER.trace("Checking if SessionAttribute specified with required = false (i.e. is optional)");
         if(parameter.isOptional()) {
+            LOGGER.trace("The SessionAttribute is indeed optional, so returning resolution as WebArgumentResolver.UNRESOLVED");
             return UNRESOLVED;
         }
+        LOGGER.trace("SessionAttribute is mandatory, so this implementation cannot resolve SessionAttribute, passing the buck");
         return passTheBuck();
     }
 }

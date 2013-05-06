@@ -27,9 +27,12 @@ class CreatableParameterSessionAttributeResolver extends AbstractChainingSession
 
     @Override
     protected Object resolveSessionAttributeInternal(SessionHandler handler, SessionAttributeParameter parameter) {
+        LOGGER.trace("Checking if SessionAttribute specified with createIfMissing = true");
         if(parameter.createableWhenNull()) {
+            LOGGER.trace("createIfMissing is = true, creating a new instance with the SessionAttributeParameter and using the SessionHandler to add new instance to session");
             return handler.addToSession(parameter.resolvedAttributeName(), parameter.createNewInstance());
         }
+        LOGGER.trace("createIfMissing is not = true, so this implementation cannot resolve SessionAttribute, passing the buck");
         return passTheBuck();
     }
 }

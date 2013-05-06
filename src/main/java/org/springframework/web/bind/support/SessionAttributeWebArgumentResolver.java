@@ -15,6 +15,8 @@
  */
 package org.springframework.web.bind.support;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -34,20 +36,29 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @see DefaultSessionAttributeResolverChain
  */
 public class SessionAttributeWebArgumentResolver implements WebArgumentResolver {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionAttributeWebArgumentResolver.class);
     private final SessionAttributeResolver resolverChain = initializeResolver();
 
-    protected DefaultSessionAttributeResolverChain initializeResolver() {
+    protected SessionAttributeResolver initializeResolver() {
+        LOGGER.trace("DefaultSessionAttributeResolverChain implementation for SessionAttributeResolver.");
         return new DefaultSessionAttributeResolverChain();
     }
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, NativeWebRequest webRequest) throws Exception {
         if(methodParameter.hasParameterAnnotation(SessionAttribute.class)) {
+            LOGGER.info("Invoked for Method Parameter defined by method: '{}' and parameter (name: '{}' and type: '{}')",
+                    methodParameter.getMethod(),
+                    methodParameter.getParameterName(),
+                    methodParameter.getParameterType());
+            LOGGER.trace("Method Parameter annotated with @SessionAttribute, delegating to resolver chain for resolution");
             SessionAttributeParameter parameter = new SessionAttributeParameter(methodParameter);
             SessionHandler handler = new SessionHandler(webRequest);
-            return resolverChain.resolveSessionAttribute(handler, parameter);
+            Object resolution = resolverChain.resolveSessionAttribute(handler, parameter);
+            LOGGER.info("Web Argument Resolved with resolution: '{}'", resolution);
+            return resolution;
         }
+        LOGGER.trace("Method Parameter NOT with @SessionAttribute, returning UNRESOLVED");
         return WebArgumentResolver.UNRESOLVED;
     }
 }

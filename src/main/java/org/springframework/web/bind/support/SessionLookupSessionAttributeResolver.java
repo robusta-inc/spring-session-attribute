@@ -27,10 +27,13 @@ class SessionLookupSessionAttributeResolver extends AbstractChainingSessionAttri
 
     @Override
     protected Object resolveSessionAttributeInternal(SessionHandler handler, SessionAttributeParameter parameter) {
+        LOGGER.trace("Checking if Session has a matching attribute name: '{}'", parameter.resolvedAttributeName());
         Object attributeIfDefined = handler.getAttributeIfDefined(parameter.resolvedAttributeName());
         if(attributeIfDefined == null) {
+            LOGGER.trace("Instance unavailable in session, so this implementation cannot resolve SessionAttribute, passing the buck");
             return passTheBuck();
         }
+        LOGGER.trace("Instance available in session");
         return attributeIfDefined;
     }
 }

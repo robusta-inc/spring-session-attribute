@@ -15,6 +15,8 @@
  */
 package org.springframework.web.bind.support;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.Assert;
@@ -40,6 +42,8 @@ public class SessionAttributeParameter {
     private final String parameterName;
     private final Class<?> parameterType;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionAttributeParameter.class);
+
     public SessionAttributeParameter(MethodParameter methodParameter) {
         Assert.notNull(methodParameter, "Cannot initialize with a null MethodParameter");
         this.parameterName = methodParameter.getParameterName();
@@ -48,6 +52,15 @@ public class SessionAttributeParameter {
         Assert.notNull(this.definedAnnotation, "Cannot initialize without a valid MethodParameter.parameterAnnotation of type SessionAttribute");
         this.parameterType = methodParameter.getParameterType();
         Assert.notNull(this.parameterType, "Cannot initialize without a valid MethodParameter.parameterType");
+        if(LOGGER.isTraceEnabled()) {
+            LOGGER.trace("SessionAttributeParameter.init with Method: '{}'", methodParameter.getMethod().toGenericString());
+            LOGGER.trace("SessionAttributeParameter.init with parameter name: '{}'", this.parameterName);
+            LOGGER.trace("SessionAttributeParameter.init with parameter type: '{}'", this.parameterType);
+            LOGGER.trace("SessionAttributeParameter.init with SessionAttribute.attributeName: '{}'", this.definedAnnotation.value());
+            LOGGER.trace("SessionAttributeParameter.init with SessionAttribute.required: '{}'", this.definedAnnotation.required());
+            LOGGER.trace("SessionAttributeParameter.init with SessionAttribute.createIfMissing: '{}'", this.definedAnnotation.createIfMissing());
+            LOGGER.trace("SessionAttributeParameter.init with SessionAttribute.createNew: '{}'", this.definedAnnotation.createNew());
+        }
     }
 
 
