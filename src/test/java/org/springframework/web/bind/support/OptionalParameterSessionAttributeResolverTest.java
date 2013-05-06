@@ -25,11 +25,11 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.web.bind.support.AbstractChainingSessionAttributeResolverTest.passesTheBuckAround;
+import static org.springframework.web.bind.support.WebArgumentResolver.UNRESOLVED;
 
-public class SessionLookupSessionAttributeResolverTest {
-    public static final String ATTRIBUTE = "AN_ATTRIBUTE";
-    public static final Object RESOLUTION = new Object();
-    private SessionLookupSessionAttributeResolver resolver;
+public class OptionalParameterSessionAttributeResolverTest {
+
+    private OptionalParameterSessionAttributeResolver resolver;
     @Mock private SessionAttributeResolver next;
     @Mock private SessionAttributeParameter parameter;
     @Mock private SessionHandler handler;
@@ -37,21 +37,18 @@ public class SessionLookupSessionAttributeResolverTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        resolver = new SessionLookupSessionAttributeResolver(next);
+        resolver = new OptionalParameterSessionAttributeResolver(next);
     }
 
     @Test
-    public void testResolveSessionAttributeInternal_shouldLookIntoSessionUsingSessionHandler_shouldReturnNull_whenTheHandlerReturnsNullAttributeValue() throws Exception {
-        when(parameter.resolvedAttributeName()).thenReturn(ATTRIBUTE);
-        when(handler.getAttributeIfDefined(ATTRIBUTE)).thenReturn(null);
+    public void testThatWhenSessionAttributeIsAnnotatedAsMandatory_shouldReturnAsUnResolved_shouldReturnNull() throws Exception {
+        when(parameter.isOptional()).thenReturn(false);
         assertThat(resolver.resolveSessionAttributeInternal(handler, parameter), passesTheBuckAround());
     }
 
     @Test
-    public void testResolveSessionAttributeInternal_shouldLookIntoSessionUsingSessionHandler_shouldReturnResolution_whenTheHandlerReturnsAnAttributeValue() throws Exception {
-        when(parameter.resolvedAttributeName()).thenReturn(ATTRIBUTE);
-        when(handler.getAttributeIfDefined(ATTRIBUTE)).thenReturn(RESOLUTION);
-        assertThat(resolver.resolveSessionAttributeInternal(handler, parameter), is(equalTo(RESOLUTION)));
+    public void testThatWhenSessionAttributeIsAnnotatedAsOptional_shouldReturnAsUNRESOLVED_Object() throws Exception {
+        when(parameter.isOptional()).thenReturn(true);
+        assertThat(resolver.resolveSessionAttributeInternal(handler, parameter), is(equalTo(UNRESOLVED)));
     }
-
 }

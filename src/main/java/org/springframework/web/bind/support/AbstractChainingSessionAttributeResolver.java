@@ -24,6 +24,7 @@ import org.springframework.web.bind.MissingServletRequestSessionAttributeExcepti
  */
 abstract class AbstractChainingSessionAttributeResolver implements SessionAttributeResolver {
     private final SessionAttributeResolver nextInChain;
+    protected static final Object PASSING_THE_BUCK_AROUND = new Object();
 
     protected AbstractChainingSessionAttributeResolver(SessionAttributeResolver nextInChain) {
         this.nextInChain = nextInChain;
@@ -33,7 +34,8 @@ abstract class AbstractChainingSessionAttributeResolver implements SessionAttrib
     @Override
     public Object resolveSessionAttribute(SessionHandler handler, SessionAttributeParameter parameter) throws MissingServletRequestSessionAttributeException {
         Object resolution = resolveSessionAttributeInternal(handler, parameter);
-        if(resolution == null) {
+        Assert.notNull(resolution, "Not expecting a null resolution, if unable to resolve implementations should return - PASSING_THE_BUCK_AROUND");
+        if(resolution == PASSING_THE_BUCK_AROUND) {
             Assert.notNull(nextInChain, "Session Attribute is unresolved and next in chain is null, verify composition of the session attribute resolved chain.");
             //noinspection ConstantConditions
             return nextInChain.resolveSessionAttribute(handler, parameter);
@@ -45,11 +47,15 @@ abstract class AbstractChainingSessionAttributeResolver implements SessionAttrib
     /**
      * Implementations should do a best case effort to resolve
      * the session attribute. If resolved the resolution should be
-     * returned. Or should return {@code null}
+     * returned. Or should return {@code PASSING_THE_BUCK_AROUND}
      * @param handler SessionHandler
      * @param parameter SessionAttributeParameter
      * @return Object - Resolved Session Attribute or Null when unresolved.
      * @throws org.springframework.web.bind.MissingServletRequestSessionAttributeException
      */
     protected abstract Object resolveSessionAttributeInternal(SessionHandler handler, SessionAttributeParameter parameter) throws MissingServletRequestSessionAttributeException;
+
+    protected final Object passTheBuck() {
+        return PASSING_THE_BUCK_AROUND;
+    }
 }

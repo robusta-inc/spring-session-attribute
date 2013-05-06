@@ -15,12 +15,35 @@
  */
 package org.springframework.web.bind.support;
 
+import org.springframework.util.Assert;
 import org.springframework.web.bind.MissingServletRequestSessionAttributeException;
 
 /**
  * A chain of responsibility in resolving the session attribute.
+ * <h6>Default implementation</h6>
+ * <ol>
+ *     <li>Create a new instance in session when
+ *     SessionAttribute.createNew is true</li>
+ *     <li>Lookup an existing instance in session when such
+ *     an instance exists</li>
+ *     <li>When not found in session
+ *          <ol>
+ *              <li>SessionAttribute.createIfMissing is true
+ *              creates a new instance in session</li>
+ *              <li>SessionAttribute.required is false, then
+ *              returns {@link WebArgumentResolver}.UNRESOLVED</li>
+ *          </ol>
+ *     </li>
+ *     <li>If none of the resolution strategies work, throws
+ *     {@link MissingServletRequestSessionAttributeException}</li>
+ * </ol>
  * @author sudhir.ravindramohan
  * @since 1.0
+ * @see AlwaysCreateSessionAttributeResolver
+ * @see SessionLookupSessionAttributeResolver
+ * @see CreatableParameterSessionAttributeResolver
+ * @see OptionalParameterSessionAttributeResolver
+ * @see MissingMandatorySessionAttributeResolver
  */
 public class DefaultSessionAttributeResolverChain implements SessionAttributeResolver {
     protected DefaultSessionAttributeResolverChain() {
@@ -35,6 +58,7 @@ public class DefaultSessionAttributeResolverChain implements SessionAttributeRes
     protected final SessionAttributeResolver resolverChain;
 
     public DefaultSessionAttributeResolverChain(SessionAttributeResolver resolverChain) {
+        Assert.notNull(resolverChain, "Require a valid SessionAttributeResolver for initialization");
         this.resolverChain = resolverChain;
     }
 

@@ -32,6 +32,6 @@ class OptionalParameterSessionAttributeResolver extends AbstractChainingSessionA
         if(parameter.isOptional()) {
             return UNRESOLVED;
         }
-        return null;
+        return passTheBuck();
     }
 }

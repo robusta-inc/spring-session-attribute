@@ -16,31 +16,21 @@
 package org.springframework.web.bind.support;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-public class DefaultSessionAttributeResolverChainTest {
-    private DefaultSessionAttributeResolverChain resolverChain;
-    @Mock private SessionAttributeResolver mockedResolverChain;
-    @Mock private SessionHandler handler;
+public class CreatableParameterSessionAttributeResolverTest {
+
+    private CreatableParameterSessionAttributeResolver resolver;
+    @Mock private SessionAttributeResolver next;
     @Mock private SessionAttributeParameter parameter;
+    @Mock private SessionHandler handler;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        resolverChain = new DefaultSessionAttributeResolverChain(mockedResolverChain);
+        resolver = new CreatableParameterSessionAttributeResolver(next);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testThatWhenInitializingWithAnInvalidResolver_shouldThrowException() throws Exception {
-        new DefaultSessionAttributeResolverChain(null);
-    }
 
-    @Test
-    public void testResolveSessionAttribute_shouldDelegateToTheInternalHandlerChain() throws Exception {
-        resolverChain.resolveSessionAttribute(handler, parameter);
-        Mockito.verify(mockedResolverChain).resolveSessionAttribute(handler, parameter);
-    }
 }

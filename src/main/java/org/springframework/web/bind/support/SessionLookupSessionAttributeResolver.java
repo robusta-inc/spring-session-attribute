@@ -27,6 +27,10 @@ class SessionLookupSessionAttributeResolver extends AbstractChainingSessionAttri
 
     @Override
     protected Object resolveSessionAttributeInternal(SessionHandler handler, SessionAttributeParameter parameter) {
-        return handler.getAttributeIfDefined(parameter.resolvedAttributeName());
+        Object attributeIfDefined = handler.getAttributeIfDefined(parameter.resolvedAttributeName());
+        if(attributeIfDefined == null) {
+            return passTheBuck();
+        }
+        return attributeIfDefined;
     }
 }

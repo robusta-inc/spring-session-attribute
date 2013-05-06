@@ -22,9 +22,9 @@ import org.mockito.MockitoAnnotations;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.web.bind.support.AbstractChainingSessionAttributeResolverTest.passesTheBuckAround;
 
 public class AlwaysCreateSessionAttributeResolverTest {
     public static final String ATTRIBUTE = "AN_ATTRIBUTE";
@@ -41,9 +41,9 @@ public class AlwaysCreateSessionAttributeResolverTest {
     }
 
     @Test
-    public void testIfCreateNewIsNotSpecified_shouldReturnNull() throws Exception {
+    public void testIfCreateNewIsNotSpecified_shouldPassTheBuckAround() throws Exception {
         when(parameter.isAlwaysCreate()).thenReturn(false);
-        assertNull(resolver.resolveSessionAttributeInternal(handler, parameter));
+        assertThat(resolver.resolveSessionAttributeInternal(handler, parameter), passesTheBuckAround());
     }
 
     @Test

@@ -35,7 +35,7 @@ import static org.springframework.util.StringUtils.isEmpty;
  * @see org.springframework.core.MethodParameter
  * @see org.springframework.web.bind.annotation.SessionAttribute
  */
-public final class SessionAttributeParameter {
+public class SessionAttributeParameter {
     private final SessionAttribute definedAnnotation;
     private final String parameterName;
     private final Class<?> parameterType;

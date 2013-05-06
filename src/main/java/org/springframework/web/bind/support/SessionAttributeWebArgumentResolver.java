@@ -20,9 +20,18 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.context.request.NativeWebRequest;
 
 /**
+ * A web argument resolver that resolves method parameters annotated with
+ * {@link SessionAttribute}.
+ *
+ * <p>If the MethodParameter is not annotated, this resolver does a no-op</p>
+ * <p>When annotated, delegates to a strategy based resolution -
+ * {@link SessionAttributeResolver}. To extend this default behavior
+ * override initializeResolver</p>
  * @author sudhir.ravindramohan
  * @since 1.0
  * @see org.springframework.web.bind.annotation.SessionAttribute
+ * @see SessionAttributeResolver
+ * @see DefaultSessionAttributeResolverChain
  */
 public class SessionAttributeWebArgumentResolver implements WebArgumentResolver {
 

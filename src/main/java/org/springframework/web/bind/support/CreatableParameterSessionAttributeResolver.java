@@ -30,6 +30,6 @@ class CreatableParameterSessionAttributeResolver extends AbstractChainingSession
         if(parameter.createableWhenNull()) {
             return handler.addToSession(parameter.resolvedAttributeName(), parameter.createNewInstance());
         }
-        return null;
+        return passTheBuck();
     }
 }

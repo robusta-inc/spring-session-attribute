@@ -22,7 +22,7 @@ import org.springframework.web.bind.MissingServletRequestSessionAttributeExcepti
  * session attribute is annotated as always create new.
  * <p>If so calls for creation of the session attribute and returns the created
  * instance as resolved</p>
- * <p>Else returns null.</p>
+ * <p>Else passes the resolution back.</p>
  * @author sudhir.ravindramohan
  * @since 1.0
  */
@@ -36,6 +36,6 @@ class AlwaysCreateSessionAttributeResolver extends AbstractChainingSessionAttrib
         if(parameter.isAlwaysCreate()) {
             return handler.addToSession(parameter.resolvedAttributeName(), parameter.createNewInstance());
         }
-        return null;
+        return passTheBuck();
     }
 }
