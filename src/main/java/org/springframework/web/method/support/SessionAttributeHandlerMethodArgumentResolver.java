@@ -21,8 +21,6 @@ import org.springframework.web.bind.support.SessionAttributeWebArgumentResolver;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
  * As of Spring MVC 3.1+ WebArgumentResolver is deprecated and replaced
