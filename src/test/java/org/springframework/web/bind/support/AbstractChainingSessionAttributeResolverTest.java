@@ -42,7 +42,7 @@ public class AbstractChainingSessionAttributeResolverTest {
 
     @Test
     public void testResolveSessionAttribute_whenUnableAbleToResolve_shouldInvokeNextInChain() throws Exception {
-        assertThat(nonResolvingResolver.resolveSessionAttribute(handler, parameter), passesTheBuckAround());
+        nonResolvingResolver.resolveSessionAttribute(handler, parameter);
         verify(next).resolveSessionAttribute(handler, parameter);
     }
 
