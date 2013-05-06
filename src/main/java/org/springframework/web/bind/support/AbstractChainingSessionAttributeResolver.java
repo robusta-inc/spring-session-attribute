@@ -34,7 +34,7 @@ abstract class AbstractChainingSessionAttributeResolver implements SessionAttrib
     public Object resolveSessionAttribute(SessionHandler handler, SessionAttributeParameter parameter) throws MissingServletRequestSessionAttributeException {
         Object resolution = resolveSessionAttributeInternal(handler, parameter);
         if(resolution == null) {
-            Assert.notNull(nextInChain == null, "Session Attribute is unresolved and next in chain is null, verify composition of the session attribute resolved chain.");
+            Assert.notNull(nextInChain, "Session Attribute is unresolved and next in chain is null, verify composition of the session attribute resolved chain.");
             //noinspection ConstantConditions
             return nextInChain.resolveSessionAttribute(handler, parameter);
         } else {
