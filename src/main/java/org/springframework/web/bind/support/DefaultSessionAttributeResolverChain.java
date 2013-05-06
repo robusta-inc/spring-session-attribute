@@ -22,17 +22,21 @@ import org.springframework.web.bind.MissingServletRequestSessionAttributeExcepti
  * @author sudhir.ravindramohan
  * @since 1.0
  */
-public final class DefaultSessionAttributeResolverChain implements SessionAttributeResolver {
+public class DefaultSessionAttributeResolverChain implements SessionAttributeResolver {
     protected DefaultSessionAttributeResolverChain() {
-        resolverChain = new AlwaysCreateSessionAttributeResolver(
+        this(new AlwaysCreateSessionAttributeResolver(
                 new SessionLookupSessionAttributeResolver(
                         new CreatableParameterSessionAttributeResolver(
                                 new OptionalParameterSessionAttributeResolver(
-                                        new MissingMandatorySessionAttributeResolver()))));
+                                        new MissingMandatorySessionAttributeResolver())))));
 
     }
 
-    private final SessionAttributeResolver resolverChain;
+    protected final SessionAttributeResolver resolverChain;
+
+    public DefaultSessionAttributeResolverChain(SessionAttributeResolver resolverChain) {
+        this.resolverChain = resolverChain;
+    }
 
     @Override
     public Object resolveSessionAttribute(SessionHandler handler, SessionAttributeParameter parameter) throws MissingServletRequestSessionAttributeException {

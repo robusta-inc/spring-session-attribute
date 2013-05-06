@@ -1,6 +1,6 @@
 <h1>@SessionAttribute for Spring-Mvc</h1>
 1. An annotation @SessionAttribute for Spring Mvc handler method parameters
-2. An extensive Spring Mvc WebArgumentResolver implementation
+2. An extensible Spring Mvc WebArgumentResolver implementation
 
 
 

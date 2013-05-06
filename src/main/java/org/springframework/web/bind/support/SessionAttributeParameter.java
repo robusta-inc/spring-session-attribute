@@ -17,27 +17,41 @@ package org.springframework.web.bind.support;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.MethodParameter;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
+ * Encapsulates a method parameter (spring object).
+ * Provides behaviors for:
+ * <ol>
+ * <li>Reading annotated attributes of {@link org.springframework.web.bind.annotation.SessionAttribute}.</li>
+ * <li>Bean instantiation - delegates to {@link org.springframework.beans.BeanUtils}</li>
+ * </ol>
  * @author sudhir.ravindramohan
  * @since 1.0
+ * @see org.springframework.beans.BeanUtils
+ * @see org.springframework.core.MethodParameter
+ * @see org.springframework.web.bind.annotation.SessionAttribute
  */
-class SessionAttributeParameter {
+public final class SessionAttributeParameter {
     private final SessionAttribute definedAnnotation;
     private final String parameterName;
     private final Class<?> parameterType;
 
-    SessionAttributeParameter(MethodParameter methodParameter) {
+    public SessionAttributeParameter(MethodParameter methodParameter) {
+        Assert.notNull(methodParameter, "Cannot initialize with a null MethodParameter");
         this.parameterName = methodParameter.getParameterName();
+        Assert.state(!isEmpty(this.parameterName), "Cannot initialize without a valid MethodParameter.parameterName");
         this.definedAnnotation = methodParameter.getParameterAnnotation(SessionAttribute.class);
+        Assert.notNull(this.definedAnnotation, "Cannot initialize without a valid MethodParameter.parameterAnnotation of type SessionAttribute");
         this.parameterType = methodParameter.getParameterType();
+        Assert.notNull(this.parameterType, "Cannot initialize without a valid MethodParameter.parameterType");
     }
 
 
-    String resolvedAttributeName() {
+    public String resolvedAttributeName() {
         return isEmpty(definedAnnotation.value()) ? parameterName : definedAnnotation.value();
     }
 

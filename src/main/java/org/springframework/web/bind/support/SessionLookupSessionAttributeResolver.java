@@ -21,7 +21,7 @@ package org.springframework.web.bind.support;
  */
 class SessionLookupSessionAttributeResolver extends AbstractChainingSessionAttributeResolver {
 
-    SessionLookupSessionAttributeResolver(SessionAttributeResolver next) {
+    protected SessionLookupSessionAttributeResolver(SessionAttributeResolver next) {
         super(next);
     }
 
