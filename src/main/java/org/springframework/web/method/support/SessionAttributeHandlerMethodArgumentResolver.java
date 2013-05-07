@@ -15,8 +15,11 @@
  */
 package org.springframework.web.method.support;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.support.SessionAttributeParameter;
 import org.springframework.web.bind.support.SessionAttributeWebArgumentResolver;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -30,6 +33,7 @@ import org.springframework.web.context.request.NativeWebRequest;
  * WebArgumentResolver</p>
  */
 public class SessionAttributeHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionAttributeHandlerMethodArgumentResolver.class);
     private final WebArgumentResolver argumentResolver;
 
     public SessionAttributeHandlerMethodArgumentResolver(WebArgumentResolver argumentResolver) {
@@ -47,6 +51,17 @@ public class SessionAttributeHandlerMethodArgumentResolver implements HandlerMet
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        return argumentResolver.resolveArgument(parameter, webRequest);
+        Object resolution = argumentResolver.resolveArgument(parameter, webRequest);
+        // per documentation of HandlerMethodArgumentResolver.resolveArgument a null is required in an unresolved scenario.
+        if(resolution == WebArgumentResolver.UNRESOLVED) {
+            LOGGER.warn("Unable to resolve method parameter, WebArgumentResolver returned UNRESOLVED, returning null");
+            return null;
+        } else if(resolution != null) {
+            SessionAttributeParameter attributeParameter = new SessionAttributeParameter(parameter);
+            LOGGER.trace("Adding Session attribute into ModelMap with model name: '{}'", parameter.getParameterName());
+            mavContainer.getModel().put(attributeParameter.resolvedAttributeName(), resolution);
+        }
+        LOGGER.trace("Returning resolution: '{}' for method parameter: '{}", resolution, parameter.getParameterName());
+        return resolution;
     }
 }
