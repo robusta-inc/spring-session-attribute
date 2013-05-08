@@ -6,7 +6,8 @@
     <groupId>org.springframework</groupId>
     <artifactId>annotated-session-attribute</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Annotation driven Session Attribute Resolution</name>
+    <packaging>jar</packaging>
+    <name>Annotation-driven @SessionAttribute Resolution</name>
     <description>
         An annotation (@SessionAttribute) driven injection mechanism for
         Session attributes handling. Has annotation driven strategies such
@@ -14,6 +15,18 @@
         new. The session attribute handling is implemented as an extensible
         web parameter resolver extension for spring-mvc.
     </description>
+    <url>https://github.com/robusta-inc/spring-session-attribute</url>
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/robusta-inc/spring-session-attribute</url>
+        <connection>scm:git:git@github.com:robusta-inc/spring-session-attribute.git</connection>
+        <developerConnection>scm:git:git@github.com:robusta-inc/spring-session-attribute.git</developerConnection>
+    </scm>
     <developers>
         <developer>
             <name>Sudhir Ravindramohan</name>
@@ -22,12 +35,6 @@
             <organizationUrl>https://github.com/robusta-inc</organizationUrl>
         </developer>
     </developers>
-    <licenses>
-        <license>
-            <name>Apache 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-        </license>
-    </licenses>
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -74,8 +81,24 @@
             <version>3.2.2.RELEASE</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
+    <profiles>
+        <profile>
+            <id>build-and-deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <pluginManagement>
             <plugins>
@@ -96,6 +119,32 @@
                         <execution>
                             <goals>
                                 <goal>test-jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.9</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
                             </goals>
                         </execution>
                     </executions>

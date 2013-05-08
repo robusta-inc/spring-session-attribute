@@ -47,7 +47,7 @@ import org.springframework.web.bind.MissingServletRequestSessionAttributeExcepti
  * @see OptionalParameterSessionAttributeResolver
  * @see MissingMandatorySessionAttributeResolver
  */
-public class DefaultSessionAttributeResolverChain implements SessionAttributeResolver {
+class DefaultSessionAttributeResolverChain implements SessionAttributeResolver {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSessionAttributeResolverChain.class);
 
     protected DefaultSessionAttributeResolverChain() {
@@ -61,7 +61,7 @@ public class DefaultSessionAttributeResolverChain implements SessionAttributeRes
 
     protected final SessionAttributeResolver resolverChain;
 
-    public DefaultSessionAttributeResolverChain(SessionAttributeResolver resolverChain) {
+    DefaultSessionAttributeResolverChain(SessionAttributeResolver resolverChain) {
         Assert.notNull(resolverChain, "Require a valid SessionAttributeResolver for initialization");
         this.resolverChain = resolverChain;
     }
